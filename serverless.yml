@@ -7,7 +7,9 @@ package:
 plugins:
   - serverless-bundle # Package our functions with Webpack
   - serverless-offline
-  - serverless-dotenv-plugin # Load .env as environment variables
+  # - serverless-dotenv-plugin # Load .env as environment variables
+
+useDotenv: true
 
 provider:
   name: aws
@@ -19,8 +21,7 @@ provider:
   # under process.env.
   environment:
     tableName: notes
-    stripeSecretKey: sk_test_51Oh6fHA5Huvr1m74Owhy872g70dkKmw2KUBdqFbpOBCBYCFghz1Arwjz9s7WdaZmVIcTP5YGQMrbTLSkmZf6wl3H00vL7L1x4D
-
+    stripeSecretKey: ${env:STRIPE_SECRET_KEY}
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
   iamRoleStatements:
@@ -110,6 +111,10 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+
+    # environment:
+    #   tableName: notes
+    #   stripeSecretKey: ${env:STRIPE_SECRET_KEY}
 # Create our resources with separate CloudFormation templates
 resources:
   # API Gateway Errors
